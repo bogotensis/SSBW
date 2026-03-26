@@ -1,13 +1,13 @@
 import prisma from './prisma/prisma.client.ts'
 
 const usuarios = [
-  { email: 'admin@prado.es', nombre: 'Administrador', contraseña: 'admin123', admin: true },
-  { email: 'usuario@prado.es', nombre: 'Usuario Test', contraseña: 'user123', admin: false }
+  { email: 'admin@prado.es', nombre: 'Administrador', password: 'admin123', admin: true },
+  { email: 'usuario@prado.es', nombre: 'Usuario Test', password: 'user123', admin: false }
 ]
 
 for (const u of usuarios) {
   try {
-    const creado = await prisma.usuario.registrar(u.email, u.nombre, u.contraseña, u.admin)
+    const creado = await prisma.usuario.registrar(u.email, u.nombre, u.password, u.admin)
     console.log('Registrado:', creado.email, '| admin:', creado.admin)
   } catch (e: any) {
     console.error('Error:', e.message)

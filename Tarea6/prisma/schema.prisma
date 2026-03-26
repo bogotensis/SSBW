@@ -64,6 +64,6 @@ model Producto {
 model Usuario {
   email      String  @id @db.Char(127)
   nombre     String  @db.Char(127)
-  contraseña String  @db.Text
+  password  String  @db.Text
   admin      Boolean @default(false)
 }
