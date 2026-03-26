@@ -1,0 +1,42 @@
+@prefix ex: <http://example.org/ssbw#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix schema: <https://schema.org/> .
+
+ex:CatalogoMuseo a owl:Ontology ;
+  rdfs:label "Ontologia de catalogo de productos de museo"@es ;
+  rdfs:comment "Modelo semantico para productos de tienda basados en productos.json"@es .
+
+ex:Producto a owl:Class ;
+  rdfs:label "Producto"@es ;
+  rdfs:comment "Articulo comercial del catalogo"@es .
+
+ex:Categoria a owl:Class ;
+  rdfs:label "Categoria"@es ;
+  rdfs:comment "Clasificacion simple por tipo de producto"@es .
+
+ex:descripcion a owl:DatatypeProperty ;
+  rdfs:domain ex:Producto ;
+  rdfs:range xsd:string ;
+  rdfs:label "descripcion"@es .
+
+ex:precio a owl:DatatypeProperty ;
+  rdfs:domain ex:Producto ;
+  rdfs:range xsd:decimal ;
+  rdfs:label "precio"@es .
+
+ex:tieneCategoria a owl:ObjectProperty ;
+  rdfs:domain ex:Producto ;
+  rdfs:range ex:Categoria ;
+  rdfs:label "tiene categoria"@es .
+
+schema:name rdfs:domain ex:Producto ;
+  rdfs:range xsd:string .
+
+schema:image rdfs:domain ex:Producto ;
+  rdfs:range xsd:anyURI .
+
+schema:priceCurrency rdfs:domain ex:Producto ;
+  rdfs:range xsd:string .

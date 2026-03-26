@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarea 3: Guía Paso a Paso - PostgreSQL con Prisma ORM</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .step {
+            margin-bottom: 40px;
+            border-left: 4px solid #667eea;
+            padding-left: 20px;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-right: 15px;
+        }
+        
+        .step h2 {
+            display: inline-block;
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+        
+        .step h3 {
+            color: #764ba2;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+        
+        .step p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        .code-block {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .code-block code {
+            color: #d63384;
+        }
+        
+        .file-name {
+            background: #764ba2;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px 5px 0 0;
+            display: inline-block;
+            font-weight: bold;
+            margin-bottom: -1px;
+        }
+        
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .icon {
+            margin-right: 8px;
+        }
+        
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .command {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .command::before {
+            content: "$ ";
+            color: #50fa7b;
+            font-weight: bold;
+        }
+        
+        footer {
+            background: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Tarea 3: PostgreSQL con Prisma ORM</h1>
+            <p>Guía completa paso a paso para principiantes</p>
+        </header>
+        
+        <div class="content">
+            <!-- Introducción -->
+            <section class="step">
+                <h2><span class="step-number">📖</span>Introducción</h2>
+                <p>
+                    En esta tarea aprenderás a configurar una base de datos <strong>PostgreSQL</strong> usando 
+                    <strong>Docker</strong> y a interactuar con ella mediante <strong>Prisma ORM</strong>.
+                </p>
+                <h3>¿Qué es un ORM?</h3>
+                <p>
+                    Un <strong>ORM (Object Relational Mapping)</strong> es una capa de software que te permite 
+                    trabajar con bases de datos usando objetos de tu lenguaje de programación, en lugar de escribir 
+                    SQL directamente. Prisma es uno de los ORMs más modernos y populares para Node.js.
+                </p>
+                <h3>¿Por qué Docker?</h3>
+                <p>
+                    Docker nos permite ejecutar PostgreSQL en un contenedor aislado, sin necesidad de instalarlo 
+                    directamente en nuestro sistema. Esto facilita la configuración y evita conflictos.
+                </p>
+            </section>
+
+            <!-- Paso 0: Requisitos -->
+            <section class="step">
+                <h2><span class="step-number">0</span>Requisitos Previos</h2>
+                <p>Antes de comenzar, asegúrate de tener instalado:</p>
+                <ul>
+                    <li><strong>Node.js</strong> (versión 18 o superior) - <a href="https://nodejs.org/" target="_blank">Descargar aquí</a></li>
+                    <li><strong>Docker Desktop</strong> - <a href="https://www.docker.com/products/docker-desktop" target="_blank">Descargar aquí</a></li>
+                    <li>Un <strong>editor de código</strong> (VS Code recomendado)</li>
+                    <li>Una <strong>terminal</strong> (CMD, PowerShell, Terminal, etc.)</li>
+                </ul>
+                <div class="info-box">
+                    <strong>💡 Verificar instalación:</strong><br>
+                    Abre una terminal y ejecuta:<br>
+                    <code>node --version</code> (debe mostrar v18 o superior)<br>
+                    <code>docker --version</code> (debe mostrar la versión de Docker)
+                </div>
+            </section>
+
+            <!-- Paso 1: Crear proyecto -->
+            <section class="step">
+                <h2><span class="step-number">1</span>Crear el Proyecto</h2>
+                <p>Primero, crea una carpeta para tu proyecto y navega a ella:</p>
+                <div class="command">mkdir Tarea3</div>
+                <div class="command">cd Tarea3</div>
+                <p>Inicializa un proyecto Node.js:</p>
+                <div class="command">npm init -y</div>
+                <div class="success-box">
+                    ✅ Esto crea un archivo <code>package.json</code> que contendrá la información de tu proyecto.
+                </div>
+            </section>
+
+            <!-- Paso 2: Instalar dependencias -->
+            <section class="step">
+                <h2><span class="step-number">2</span>Instalar Dependencias</h2>
+                <p>Instala las librerías necesarias para trabajar con Prisma y PostgreSQL:</p>
+                <div class="command">npm install @prisma/client @prisma/adapter-pg</div>
+                <div class="command">npm install -D prisma dotenv tsx</div>
+                
+                <h3>¿Qué instalamos?</h3>
+                <ul>
+                    <li><strong>@prisma/client</strong>: Cliente para interactuar con la base de datos</li>
+                    <li><strong>@prisma/adapter-pg</strong>: Adaptador específico para PostgreSQL</li>
+                    <li><strong>prisma</strong>: Herramienta CLI de Prisma (desarrollo)</li>
+                    <li><strong>dotenv</strong>: Para cargar variables de entorno desde archivo .env</li>
+                    <li><strong>tsx</strong>: Para ejecutar archivos TypeScript directamente</li>
+                </ul>
+                
+                <div class="warning-box">
+                    ⚠️ <strong>Importante:</strong> Usamos Prisma 6 en lugar de Prisma 7 porque la versión 7 tiene 
+                    problemas de compatibilidad. Asegúrate de que tu <code>package.json</code> especifique la versión 6.
+                </div>
+            </section>
+
+            <!-- Paso 3: Configurar variables de entorno -->
+            <section class="step">
+                <h2><span class="step-number">3</span>Configurar Variables de Entorno</h2>
+                <p>Crea un archivo <code>.env</code> en la raíz del proyecto con el siguiente contenido:</p>
+                
+                <div class="file-name">.env</div>
+                <div class="code-block">
+<code>POSTGRES_USER=yo
+POSTGRES_PASSWORD=una_clave_muy_segura_123
+POSTGRES_DB=ssbw
+DATABASE_URL="postgresql://yo:una_clave_muy_segura_123@localhost:5432/ssbw?schema=public"</code>
+                </div>
+                
+                <h3>Explicación de cada variable:</h3>
+                <ul>
+                    <li><strong>POSTGRES_USER</strong>: Nombre de usuario para PostgreSQL</li>
+                    <li><strong>POSTGRES_PASSWORD</strong>: Contraseña del usuario</li>
+                    <li><strong>POSTGRES_DB</strong>: Nombre de la base de datos que se creará</li>
+                    <li><strong>DATABASE_URL</strong>: URL completa de conexión que usa Prisma</li>
+                </ul>
+                
+                <div class="warning-box">
+                    🔒 <strong>Seguridad:</strong> El archivo <code>.env</code> contiene información sensible. 
+                    NUNCA lo subas a repositorios públicos. Agrégalo a tu <code>.gitignore</code>.
+                </div>
+            </section>
+
+            <!-- Paso 4: Docker Compose -->
+            <section class="step">
+                <h2><span class="step-number">4</span>Configurar Docker Compose</h2>
+                <p>Crea un archivo <code>docker-compose.yml</code> para configurar PostgreSQL:</p>
+                
+                <div class="file-name">docker-compose.yml</div>
+                <div class="code-block">
+<code>version: '3.8'
+
+services:
+  db:
+    image: postgres:alpine
+    container_name: postgres_ssbw
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:</code>
+                </div>
+                
+                <h3>¿Qué hace este archivo?</h3>
+                <ul>
+                    <li>Usa la imagen <strong>postgres:alpine</strong> (versión ligera de PostgreSQL)</li>
+                    <li>Nombra el contenedor como <strong>postgres_ssbw</strong></li>
+                    <li>Mapea el puerto <strong>5432</strong> (puerto estándar de PostgreSQL)</li>
+                    <li>Crea un <strong>volumen</strong> para persistir los datos</li>
+                    <li>Lee las credenciales desde el archivo <code>.env</code></li>
+                </ul>
+            </section>
+
+            <!-- Paso 5: Iniciar PostgreSQL -->
+            <section class="step">
+                <h2><span class="step-number">5</span>Iniciar PostgreSQL</h2>
+                <p>Inicia el contenedor de PostgreSQL con Docker Compose:</p>
+                <div class="command">docker compose up -d</div>
+                
+                <h3>¿Qué hace este comando?</h3>
+                <ul>
+                    <li><strong>docker compose up</strong>: Inicia los servicios definidos en docker-compose.yml</li>
+                    <li><strong>-d</strong>: Ejecuta en segundo plano (detached mode)</li>
+                </ul>
+                
+                <p>Verifica que el contenedor está corriendo:</p>
+                <div class="command">docker ps</div>
+                
+                <div class="success-box">
+                    ✅ Deberías ver un contenedor llamado <code>postgres_ssbw</code> en estado "Up"
+                </div>
+            </section>
+
+            <!-- Paso 6: Configurar Prisma Schema -->
+            <section class="step">
+                <h2><span class="step-number">6</span>Configurar el Schema de Prisma</h2>
+                <p>Crea la carpeta <code>prisma</code> y dentro el archivo <code>schema.prisma</code>:</p>
+                
+                <div class="file-name">prisma/schema.prisma</div>
+                <div class="code-block">
+<code>generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+  previewFeatures = ["fullTextSearchPostgres"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Producto {
+  id          Int     @id @default(autoincrement())
+  título      String  @db.Char(127)
+  descripción String  @db.Text
+  precio      Decimal
+  imagen      String  @db.Char(127)
+}</code>
+                </div>
+                
+                <h3>Explicación del schema:</h3>
+                <ul>
+                    <li><strong>generator</strong>: Configura cómo se generará el cliente de Prisma</li>
+                    <li><strong>datasource</strong>: Define la conexión a PostgreSQL</li>
+                    <li><strong>model Producto</strong>: Define la estructura de la tabla de productos</li>
+                    <li><strong>@id</strong>: Marca el campo como clave primaria</li>
+                    <li><strong>@default(autoincrement())</strong>: El ID se genera automáticamente</li>
+                    <li><strong>Decimal</strong>: Tipo de dato preciso para precios (mejor que Float)</li>
+                </ul>
+            </section>
+
+            <!-- Paso 7: Crear migración -->
+            <section class="step">
+                <h2><span class="step-number">7</span>Crear la Migración</h2>
+                <p>Una migración es un archivo que contiene los cambios en la estructura de la base de datos:</p>
+                <div class="command">npx prisma migrate dev --name esquema_inicial</div>
+                
+                <h3>¿Qué hace este comando?</h3>
+                <ul>
+                    <li>Lee el archivo <code>schema.prisma</code></li>
+                    <li>Genera el SQL necesario para crear las tablas</li>
+                    <li>Aplica los cambios en PostgreSQL</li>
+                    <li>Guarda la migración en <code>prisma/migrations/</code></li>
+                    <li>Genera automáticamente el cliente de Prisma</li>
+                </ul>
+                
+                <div class="success-box">
+                    ✅ Si todo va bien, verás el mensaje "Your database is now in sync with your schema"
+                </div>
+            </section>
+
+            <!-- Paso 8: Configurar cliente Prisma -->
+            <section class="step">
+                <h2><span class="step-number">8</span>Configurar el Cliente de Prisma</h2>
+                <p>Crea el archivo <code>prisma/prisma.client.ts</code>:</p>
+                
+                <div class="file-name">prisma/prisma.client.ts</div>
+                <div class="code-block">
+<code>import 'dotenv/config';
+import { PrismaClient } from '../generated/prisma/index.js'
+import { PrismaPg } from '@prisma/adapter-pg'
+
+const adapter = new PrismaPg({ 
+  connectionString: process.env.DATABASE_URL 
+})
+
+const prisma = new PrismaClient({ adapter })
+
+export default prisma</code>
+                </div>
+                
+                <h3>¿Qué hace este archivo?</h3>
+                <ul>
+                    <li>Carga las variables de entorno del archivo <code>.env</code></li>
+                    <li>Configura el adaptador de PostgreSQL</li>
+                    <li>Crea una instancia de PrismaClient</li>
+                    <li>Exporta la instancia para usarla en otros archivos</li>
+                </ul>
+            </section>
+
+            <!-- Paso 9: Script de seed -->
+            <section class="step">
+                <h2><span class="step-number">9</span>Crear Script para Poblar la Base de Datos</h2>
+                <p>Crea el archivo <code>seed.ts</code> para insertar productos en la base de datos:</p>
+                
+                <div class="file-name">seed.ts</div>
+                <div class="code-block">
+<code>import prisma from "./prisma/prisma.client.ts";
+import productos from "./productos.json" with {type: 'json'}
+
+await Guardar_en_DB(productos)
+
+// Consultas de ejemplo
+const total = await prisma.producto.count()
+console.log(`Total de productos: ${total}`)
+
+await prisma.$disconnect()
+
+async function Guardar_en_DB(productos) {
+  for (const producto of productos) {
+    const precio = Number(
+      producto.texto_precio.slice(0, -2).replace(/,/, '.')
+    )
+    
+    await prisma.producto.create({
+      data: {
+        título: producto.título,
+        descripción: producto.descripción,
+        imagen: producto.imagen,
+        precio
+      }
+    })
+  }
+}</code>
+                </div>
+                
+                <p>Agrega el script al <code>package.json</code>:</p>
+                <div class="code-block">
+<code>"scripts": {
+  "seed": "tsx seed.ts",
+  "consulta": "tsx consulta.ts"
+}</code>
+                </div>
+            </section>
+
+            <!-- Paso 10: Ejecutar seed -->
+            <section class="step">
+                <h2><span class="step-number">10</span>Poblar la Base de Datos</h2>
+                <p>Ejecuta el script de seed para insertar los productos:</p>
+                <div class="command">npm run seed</div>
+                
+                <div class="success-box">
+                    ✅ Verás mensajes de "Creado:" para cada producto insertado, seguido de estadísticas de la base de datos.
+                </div>
+            </section>
+
+            <!-- Paso 11: Consultas -->
+            <section class="step">
+                <h2><span class="step-number">11</span>Realizar Consultas</h2>
+                <p>Crea el archivo <code>consulta.ts</code> para buscar productos:</p>
+                
+                <div class="file-name">consulta.ts</div>
+                <div class="code-block">
+<code>import prisma from "./prisma/prisma.client.ts";
+
+const productos = await prisma.producto.findMany({
+  where: {
+    descripción: {
+      contains: 'lámina',
+      mode: 'insensitive'
+    }
+  },
+  orderBy: {
+    precio: 'asc'
+  }
+})
+
+console.log(`Encontrados ${productos.length} productos`)
+productos.forEach(p => {
+  console.log(`- ${p.título}: ${p.precio}€`)
+})
+
+await prisma.$disconnect()</code>
+                </div>
+                
+                <p>Ejecuta la consulta:</p>
+                <div class="command">npm run consulta</div>
+            </section>
+
+            <!-- Paso 12: Prisma Studio -->
+            <section class="step">
+                <h2><span class="step-number">12</span>Explorar con Prisma Studio</h2>
+                <p>Prisma Studio es una interfaz gráfica para ver y editar tus datos:</p>
+                <div class="command">npx prisma studio</div>
+                
+                <p>Esto abrirá una página web en <code>http://localhost:5555</code> donde podrás:</p>
+                <ul>
+                    <li>Ver todos los productos</li>
+                    <li>Editar registros</li>
+                    <li>Eliminar datos</li>
+                    <li>Crear nuevos registros</li>
+                </ul>
+                
+                <div class="info-box">
+                    💡 <strong>Tip:</strong> Prisma Studio es muy útil para debugging y desarrollo.
+                </div>
+            </section>
+
+            <!-- Comandos útiles -->
+            <section class="step">
+                <h2><span class="step-number">📝</span>Comandos Útiles</h2>
+                
+                <h3>Docker:</h3>
+                <div class="code-block">
+<code># Ver contenedores corriendo
+docker ps
+
+# Ver logs de PostgreSQL
+docker compose logs -f db
+
+# Detener PostgreSQL
+docker compose down
+
+# Detener y eliminar datos
+docker compose down -v</code>
+                </div>
+                
+                <h3>Prisma:</h3>
+                <div class="code-block">
+<code># Generar cliente después de cambios en schema
+npx prisma generate
+
+# Resetear base de datos
+npx prisma migrate reset
+
+# Ver estado de migraciones
+npx prisma migrate status
+
+# Abrir Prisma Studio
+npx prisma studio</code>
+                </div>
+            </section>
+
+            <!-- Solución de problemas -->
+            <section class="step">
+                <h2><span class="step-number">🔧</span>Solución de Problemas</h2>
+                
+                <h3>Error: "Can't reach database server"</h3>
+                <ul>
+                    <li>Verifica que Docker esté corriendo: <code>docker ps</code></li>
+                    <li>Verifica que el puerto 5432 no esté ocupado</li>
+                    <li>Reinicia el contenedor: <code>docker compose restart</code></li>
+                </ul>
+                
+                <h3>Error: "Environment variable not found"</h3>
+                <ul>
+                    <li>Verifica que el archivo <code>.env</code> existe</li>
+                    <li>Verifica que contiene todas las variables necesarias</li>
+                    <li>Reinicia la terminal después de crear el archivo</li>
+                </ul>
+                
+                <h3>Error al ejecutar seed.ts</h3>
+                <ul>
+                    <li>Asegúrate de haber ejecutado <code>npx prisma migrate dev</code> primero</li>
+                    <li>Verifica que el archivo <code>productos.json</code> existe</li>
+                    <li>Verifica que PostgreSQL está corriendo</li>
+                </ul>
+            </section>
+
+            <!-- Recursos adicionales -->
+            <section class="step">
+                <h2><span class="step-number">📚</span>Recursos Adicionales</h2>
+                <ul>
+                    <li><a href="https://www.prisma.io/docs" target="_blank">Documentación oficial de Prisma</a></li>
+                    <li><a href="https://www.postgresql.org/docs/" target="_blank">Documentación de PostgreSQL</a></li>
+                    <li><a href="https://docs.docker.com/compose/" target="_blank">Documentación de Docker Compose</a></li>
+                    <li><a href="https://www.prisma.io/docs/orm/prisma-client/queries/crud" target="_blank">Guía de consultas CRUD con Prisma</a></li>
+                </ul>
+            </section>
+        </div>
+        
+        <footer>
+            <p>📖 Tarea 3 - Base de Datos con ORM Prisma y PostgreSQL</p>
+            <p>Creado con ❤️ para principiantes en desarrollo web</p>
+        </footer>
+    </div>
+</body>
+</html>

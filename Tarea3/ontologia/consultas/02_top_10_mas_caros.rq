@@ -1,0 +1,11 @@
+PREFIX ex: <http://example.org/ssbw#>
+PREFIX schema: <https://schema.org/>
+
+SELECT ?producto ?nombre ?precio
+WHERE {
+  ?producto a ex:Producto ;
+            schema:name ?nombre ;
+            ex:precio ?precio .
+}
+ORDER BY DESC(?precio)
+LIMIT 10

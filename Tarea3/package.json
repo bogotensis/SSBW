@@ -1,0 +1,22 @@
+{
+  "name": "tarea3-ssbw",
+  "version": "1.0.0",
+  "description": "Tarea 3: Base de Datos con ORM Prisma y PostgreSQL",
+  "type": "module",
+  "scripts": {
+    "seed": "tsx seed.ts",
+    "consulta": "tsx consulta.ts"
+  },
+  "keywords": ["prisma", "postgresql", "orm"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "prisma": "^6.0.0",
+    "dotenv": "^16.4.5",
+    "tsx": "^4.19.2"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.0.0",
+    "@prisma/adapter-pg": "^6.0.0"
+  }
+}

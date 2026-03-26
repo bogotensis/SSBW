@@ -1,0 +1,11 @@
+PREFIX ex: <http://example.org/ssbw#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?categoria ?etiqueta (COUNT(?producto) AS ?total)
+WHERE {
+  ?producto a ex:Producto ;
+            ex:tieneCategoria ?categoria .
+  ?categoria rdfs:label ?etiqueta .
+}
+GROUP BY ?categoria ?etiqueta
+ORDER BY DESC(?total)

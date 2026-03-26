@@ -1,0 +1,38 @@
+### Archivo .gitignore
+### Define qué archivos y carpetas NO deben subirse al repositorio Git
+### Esto protege información sensible y evita subir archivos innecesarios
+
+### Archivos de variables de entorno
+### Contienen contraseñas y datos sensibles
+### NUNCA deben subirse al repositorio
+.env
+.env.local
+.env.*.local
+
+### Dependencias de Node.js
+### node_modules contiene miles de archivos de librerías
+### No se suben porque se pueden reinstalar con 'npm install'
+node_modules/
+
+### Código generado por Prisma
+### Se genera automáticamente con 'npx prisma generate'
+### No necesita estar en el repositorio
+generated/
+
+### Archivos de migraciones temporales
+### Prisma los crea durante el desarrollo
+*.db
+*.db-journal
+
+### Logs y archivos temporales
+*.log
+npm-debug.log*
+.DS_Store
+
+### Archivos de IDEs
+### Configuraciones específicas del editor de cada desarrollador
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
