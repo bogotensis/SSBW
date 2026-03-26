@@ -1,26 +1,37 @@
 # Tarea 2: Web Scraping - Tienda Prado
 
-Web scraping de la Tienda del Museo del Prado para obtener información de productos.
+Web scraping de la sección "Impresiones" de la Tienda del Museo del Prado usando Playwright. Genera un `productos.json` y descarga las imágenes en local.
 
-## Instalación
+## ✅ Checklist
+
+- [x] Playwright instalado y configurado
+- [x] Script `scrap-tp.js` con navegador headless (Chromium)
+- [x] User-agent simulando Chrome de escritorio
+- [x] Carga de todos los productos con `?resultsPerPage=999`
+- [x] Extracción de: título, descripción, texto_precio, imagen
+- [x] Nombre de archivo generado desde el título con regex
+- [x] Descarga de imágenes en carpeta `imagenes/`
+- [x] Resultado guardado en `productos.json` (114 productos, 112 imágenes)
+
+## 🚀 Instalación y ejecución
 
 ```bash
 npm install
 npx playwright install chromium
-```
-
-## Uso
-
-```bash
 npm run scrap
 ```
 
-## Resultado
+## 📁 Estructura
 
-- **productos.json**: Archivo JSON con 114 productos (título, descripción, precio, imagen)
-- **imagenes/**: Carpeta con 112 imágenes descargadas
+```
+Tarea2/
+├── scrap-tp.js       # Script de scraping
+├── productos.json    # Resultado: lista de productos
+├── imagenes/         # Imágenes descargadas
+└── package.json
+```
 
-## Estructura del JSON
+## 📄 Estructura del JSON generado
 
 ```json
 [
@@ -33,8 +44,10 @@ npm run scrap
 ]
 ```
 
-## Tecnologías
+## 📝 Observaciones
 
-- **Playwright**: Automatización del navegador
-- **Node.js**: Entorno de ejecución
-- **Fetch API**: Descarga de imágenes
+- Playwright instancia un navegador real, lo que permite esperar a que carguen elementos dinámicos.
+- Se añade un retardo entre peticiones para simular comportamiento humano y evitar bloqueos.
+- El nombre del archivo de imagen se genera con: `título.replace(/[^a-z0-9]/gi, '_').toLowerCase()`
+- `productos.json` e `imagenes/` son reutilizados por las tareas siguientes.
+- Playwright también se usará para testing E2E en tareas posteriores.

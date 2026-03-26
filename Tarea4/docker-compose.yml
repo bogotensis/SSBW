@@ -1,0 +1,63 @@
+### Docker Compose es una herramienta para definir y ejecutar aplicaciones Docker multi-contenedor
+### Este archivo define los servicios (contenedores) que necesitamos para nuestra aplicación
+
+### Versión del formato de docker-compose que estamos usando
+version: '3.8'
+
+### Definición de los servicios (contenedores) que vamos a ejecutar
+services:
+  ### Servicio de base de datos PostgreSQL
+  ### Este contenedor ejecutará PostgreSQL
+  db:
+    ### Imagen de Docker que vamos a usar
+    ### postgres:alpine es una versión ligera de PostgreSQL (menos tamaño)
+    ### alpine es una distribución Linux muy pequeña y eficiente
+    image: postgres:alpine
+    
+    ### Nombre personalizado para el contenedor
+    ### Esto hace más fácil identificarlo cuando ejecutamos comandos Docker
+    container_name: postgres_ssbw
+    
+    ### Política de reinicio del contenedor
+    ### always = si el contenedor se detiene, Docker lo reiniciará automáticamente
+    ### Útil para que la BD siempre esté disponible
+    restart: always
+    
+    ### Variables de entorno que se pasan al contenedor
+    ### Estas variables configuran PostgreSQL cuando se inicia por primera vez
+    ### Las tomamos del archivo .env por seguridad
+    environment:
+      ### Usuario administrador de PostgreSQL
+      ### Se crea automáticamente cuando el contenedor inicia por primera vez
+      POSTGRES_USER: ${POSTGRES_USER}
+      
+      ### Contraseña del usuario administrador
+      ### Necesaria para conectarse a la base de datos
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      
+      ### Nombre de la base de datos que se creará automáticamente
+      ### PostgreSQL creará esta BD cuando inicie por primera vez
+      POSTGRES_DB: ${POSTGRES_DB}
+    
+    ### Mapeo de puertos entre el host (tu máquina) y el contenedor
+    ### Formato: "puerto_host:puerto_contenedor"
+    ### 5432 es el puerto por defecto de PostgreSQL
+    ### Esto permite que aplicaciones en tu máquina se conecten a la BD en el contenedor
+    ports:
+      - "5432:5432"
+    
+    ### Volúmenes para persistir los datos
+    ### Sin esto, los datos se perderían cuando el contenedor se detiene
+    volumes:
+      ### Volumen nombrado que almacena los datos de PostgreSQL
+      ### Los datos se guardan en /var/lib/postgresql/data dentro del contenedor
+      ### Docker gestiona dónde se almacenan físicamente en tu máquina
+      - postgres_data:/var/lib/postgresql/data
+
+### Definición de volúmenes
+### Los volúmenes son espacios de almacenamiento persistente gestionados por Docker
+volumes:
+  ### Volumen para los datos de PostgreSQL
+  ### Este volumen persiste incluso si eliminamos el contenedor
+  ### Solo se elimina si ejecutamos: docker-compose down -v
+  postgres_data:

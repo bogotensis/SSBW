@@ -1,164 +1,88 @@
 # Tarea 3: Base de Datos con ORM Prisma y PostgreSQL
 
-Este proyecto configura una base de datos PostgreSQL usando Docker y el ORM Prisma para gestionar productos.
+Configuración de una base de datos PostgreSQL en Docker y uso del ORM Prisma 7 para definir el esquema, migraciones y poblar la BD con los datos obtenidos en Tarea 2.
 
-## 📋 Requisitos Previos
+## ✅ Checklist
 
-- Node.js instalado (versión 18 o superior)
-- Docker y Docker Compose instalados
-- Terminal/línea de comandos
+- [x] PostgreSQL corriendo en Docker con imagen alpine
+- [x] Credenciales gestionadas con variables de entorno en `.env`
+- [x] Prisma 7 instalado con adaptador `@prisma/adapter-pg`
+- [x] Modelo `Producto` definido en `prisma/schema.prisma`
+- [x] `fullTextSearchPostgres` activado como preview feature
+- [x] Migración `esquema_inicial` generada y aplicada
+- [x] Cliente Prisma generado en `generated/prisma/`
+- [x] `prisma/prisma.client.ts` configurado con `PrismaPg` adapter
+- [x] Script `seed.ts` que lee `productos.json` e inserta en la BD
 
-## 🚀 Pasos para Ejecutar el Proyecto
+## 🚀 Instalación y ejecución
 
-### 1. Instalar las dependencias de Node.js
+### 1. Instalar dependencias
 
 ```bash
 npm install
 ```
 
-Este comando instala todas las librerías necesarias definidas en `package.json`:
-- `prisma`: herramienta ORM para gestionar la base de datos
-- `@prisma/client`: cliente para interactuar con la BD desde código
-- `@prisma/adapter-pg`: adaptador para PostgreSQL
-- `dotenv`: para cargar variables de entorno
-- `tsx`: para ejecutar archivos TypeScript
+### 2. Configurar `.env`
 
-### 2. Iniciar la base de datos PostgreSQL con Docker
+```bash
+POSTGRES_USER=yo
+POSTGRES_PASSWORD=una_clave_muy_segura_123
+POSTGRES_DB=ssbw
+DATABASE_URL="postgresql://yo:una_clave_muy_segura_123@localhost:5432/ssbw?schema=public"
+```
+
+### 3. Iniciar PostgreSQL
 
 ```bash
 docker compose up -d
 ```
 
-Este comando:
-- Lee el archivo `docker-compose.yml`
-- Descarga la imagen de PostgreSQL (si no la tienes)
-- Crea y arranca el contenedor con PostgreSQL
-- La opción `-d` lo ejecuta en segundo plano (detached)
-
-Para verificar que está corriendo:
-```bash
-docker ps
-```
-
-Deberías ver un contenedor llamado `postgres_ssbw` en estado "Up".
-
-### 3. Crear las tablas en la base de datos (migración)
+### 4. Aplicar migración y generar cliente
 
 ```bash
 npx prisma migrate dev --name esquema_inicial
-```
-
-Este comando:
-- Lee el archivo `prisma/schema.prisma`
-- Crea las tablas en PostgreSQL según el modelo definido
-- Guarda la migración en `prisma/migrations/`
-- El nombre "esquema_inicial" identifica esta migración
-
-### 4. Generar el cliente Prisma
-
-```bash
 npx prisma generate
 ```
 
-Este comando:
-- Genera código TypeScript en `generated/prisma/`
-- Este código nos permite interactuar con la BD de forma tipada
-- Se basa en el modelo definido en `schema.prisma`
-
-### 5. Poblar la base de datos con productos
+### 5. Poblar la BD
 
 ```bash
 npm run seed
 ```
 
-Este comando:
-- Ejecuta el archivo `seed.ts`
-- Lee los productos de `productos.json`
-- Los inserta en la tabla Producto de la BD
-- Muestra ejemplos de consultas
-
-### 6. (Opcional) Ver los datos con Prisma Studio
+### 6. (Opcional) Inspeccionar datos
 
 ```bash
-npx prisma studio
+npx prisma studio   # abre http://localhost:5555
 ```
 
-Este comando:
-- Abre una interfaz web en http://localhost:5555
-- Permite ver y editar los datos de la BD visualmente
-- Muy útil para desarrollo y debugging
-
-## 🛑 Detener el Proyecto
-
-Para detener la base de datos:
-
-```bash
-docker compose down
-```
-
-Para detener Y eliminar los datos:
-
-```bash
-docker compose down -v
-```
-
-⚠️ La opción `-v` elimina el volumen con todos los datos. Úsala solo si quieres empezar desde cero.
-
-## 📁 Estructura del Proyecto
+## 📁 Estructura
 
 ```
 Tarea3/
-├── .env                      # Variables de entorno (contraseñas, URLs)
-├── .gitignore               # Archivos que Git debe ignorar
-├── docker-compose.yml       # Configuración de Docker para PostgreSQL
-├── package.json             # Dependencias del proyecto
-├── productos.json           # Datos de productos a cargar
-├── seed.ts                  # Script para poblar la BD
 ├── prisma/
-│   ├── schema.prisma        # Modelo de datos (estructura de tablas)
-│   ├── prisma.client.ts     # Configuración del cliente Prisma
-│   └── migrations/          # Historial de cambios en la BD
-└── generated/               # Código generado por Prisma (no editar)
+│   ├── schema.prisma         # Modelo de datos
+│   ├── prisma.client.ts      # Configuración del cliente
+│   └── migrations/           # Historial de migraciones
+├── generated/prisma/         # Cliente generado (no editar)
+├── docker-compose.yml        # PostgreSQL en Docker
+├── .env                      # Variables de entorno
+├── productos.json            # Datos fuente (de Tarea 2)
+├── seed.ts                   # Script de carga inicial
+└── package.json
 ```
 
-## 🔍 Comandos Útiles
+## 🛑 Detener la BD
 
-### Ver logs de PostgreSQL
 ```bash
-docker compose logs -f db
+docker compose down       # detiene el contenedor
+docker compose down -v    # detiene y elimina los datos
 ```
 
-### Conectarse a PostgreSQL directamente
-```bash
-docker exec -it postgres_ssbw psql -U yo -d ssbw
-```
+## 📝 Observaciones
 
-### Resetear la base de datos
-```bash
-npx prisma migrate reset
-```
-
-### Ver el estado de las migraciones
-```bash
-npx prisma migrate status
-```
-
-## ❓ Solución de Problemas
-
-### Error: "Can't reach database server"
-- Verifica que Docker esté corriendo: `docker ps`
-- Verifica que el puerto 5432 no esté ocupado: `lsof -i :5432`
-
-### Error: "Environment variable not found: DATABASE_URL"
-- Verifica que el archivo `.env` existe
-- Verifica que contiene la línea `DATABASE_URL=...`
-
-### Error al ejecutar seed.ts
-- Asegúrate de haber ejecutado `npx prisma migrate dev` primero
-- Asegúrate de haber ejecutado `npx prisma generate`
-
-## 📚 Referencias
-
-- [Prisma Documentation](https://www.prisma.io/docs)
-- [PostgreSQL Documentation](https://www.postgresql.org/docs/)
-- [Docker Compose Documentation](https://docs.docker.com/compose/)
+- Prisma 7 introduce cambios respecto a v6; seguir la guía [Getting Started with Prisma 7](https://medium.com/@faresahmednabih/getting-started-with-prisma-7-with-nodejs-postgresql-1bb4de3c8336).
+- El campo `precio` se extrae de `texto_precio` con: `Number(texto_precio.slice(0, -2).replace(/,/, '.'))`
+- La carpeta `generated/` y el archivo `.env` están en `.gitignore` y no se suben al repositorio.
+- El volumen Docker persiste los datos entre reinicios; usar `-v` solo para empezar desde cero.
+- La BD de esta tarea es compartida y reutilizada por Tarea 4 en adelante.

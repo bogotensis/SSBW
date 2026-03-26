@@ -1,0 +1,62 @@
+/// GENERADOR DEL CLIENTE PRISMA
+/// Esta sección configura cómo Prisma generará el código del cliente
+/// que usaremos para interactuar con la base de datos
+generator client {
+  /// Tipo de generador: prisma-client
+  /// Esto indica que queremos generar el cliente de Prisma
+  provider = "prisma-client-js"
+  
+  /// Directorio donde se generará el código del cliente
+  /// Lo ponemos en una carpeta separada para mantener organizado el proyecto
+  output   = "../generated/prisma"
+  
+  /// Características en preview (experimentales) que queremos usar
+  /// fullTextSearchPostgres: permite hacer búsquedas de texto completo en PostgreSQL
+  /// Útil para buscar productos por descripción o título
+  previewFeatures = ["fullTextSearchPostgres"]
+}
+
+/// CONFIGURACIÓN DE LA FUENTE DE DATOS
+/// Aquí definimos qué tipo de base de datos vamos a usar
+datasource db {
+  /// Proveedor de base de datos: PostgreSQL
+  /// Prisma soporta varios tipos de BD (MySQL, SQLite, etc.)
+  /// pero nosotros usamos PostgreSQL
+  provider = "postgresql"
+  
+  /// URL de conexión a la base de datos
+  /// Se toma de la variable de entorno DATABASE_URL del archivo .env
+  /// Esto mantiene las credenciales fuera del código
+  url      = env("DATABASE_URL")
+}
+
+/// MODELO PRODUCTO
+/// Define la estructura de la tabla 'Producto' en la base de datos
+/// Cada campo aquí se convierte en una columna en la tabla
+model Producto {
+  /// Campo id: identificador único de cada producto
+  /// Int: tipo de dato entero
+  /// @id: marca este campo como clave primaria (identificador único)
+  /// @default(autoincrement()): el valor se genera automáticamente, incrementando en 1
+  id          Int     @id @default(autoincrement())
+  
+  /// Campo título: nombre del producto
+  /// String: tipo de dato texto
+  /// @db.Char(127): en PostgreSQL será un CHAR de máximo 127 caracteres
+  título      String  @db.Char(127)
+  
+  /// Campo descripción: descripción detallada del producto
+  /// String: tipo de dato texto
+  /// @db.Text: en PostgreSQL será un TEXT (sin límite de caracteres)
+  descripción String  @db.Text
+  
+  /// Campo precio: precio del producto
+  /// Decimal: tipo de dato para números decimales (mejor que Float para dinero)
+  /// Mantiene precisión exacta, importante para valores monetarios
+  precio      Decimal
+  
+  /// Campo imagen: ruta o nombre del archivo de imagen del producto
+  /// String: tipo de dato texto
+  /// @db.Char(127): en PostgreSQL será un CHAR de máximo 127 caracteres
+  imagen      String  @db.Char(127)
+}
