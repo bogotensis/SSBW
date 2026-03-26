@@ -1,0 +1,50 @@
+{% extends "base.njk" %}
+
+{% block title %}Iniciar sesión - Tienda Prado{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-7">
+            
+            <h1 class="mb-4" style="font-family: 'Georgia', 'Times New Roman', Times, serif; font-size: 1.5rem; color: #444; font-weight: normal;">
+                Inicia sesión con tu cuenta
+            </h1>
+
+            {% if error %}
+            <div class="alert alert-danger rounded-0 mb-4 text-center" role="alert" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 0.9rem;">
+                Email o contraseña incorrectos
+            </div>
+            {% endif %}
+
+            <div class="border p-4 p-md-5" style="border-color: #eaeaea !important; background-color: #ffffff;">
+                <form action="/login" method="POST">
+                    
+                    <div class="mb-4 pb-2 border-bottom" style="border-color: #eaeaea !important;">
+                        <input type="email" name="email" class="form-control border-0 shadow-none px-0 bg-transparent" placeholder="Correo electrónico" required style="font-family: 'Georgia', 'Times New Roman', Times, serif; color: #555;">
+                    </div>
+
+                    <div class="mb-5 pb-2 border-bottom position-relative" style="border-color: #eaeaea !important;">
+                        <input type="password" name="contraseña" class="form-control border-0 shadow-none px-0 bg-transparent" placeholder="Contraseña" required style="font-family: 'Georgia', 'Times New Roman', Times, serif; color: #555; padding-right: 30px;">
+                        <span class="position-absolute" style="right: 5px; top: 50%; transform: translateY(-50%); color: #444;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <line x1="3" y1="3" x2="21" y2="21"></line>
+                            </svg>
+                        </span>
+                    </div>
+
+                    <div class="text-center mt-5">
+                        <button type="submit" class="btn text-white px-5 py-2" style="background-color: #767676; border-radius: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 0.95rem;">
+                            Iniciar sesión
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
