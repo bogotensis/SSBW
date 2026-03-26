@@ -4,8 +4,8 @@ Añade autenticación con JWT en cookies a la MPA de la Tienda Prado. Incluye ha
 
 ## ✅ Checklist
 
-- [x] Modelo `Usuario` en `schema.prisma`: `email` (PK), `nombre`, `contraseña`, `admin`
-- [x] Migración `con_usuario` aplicada
+- [x] Migración `con_usuario` + `rename_password` aplicadas
+- [x] Campo `password` (sin ñ) en modelo `Usuario` para evitar problemas de encoding
 - [x] Hashing de contraseñas con bcrypt en el model (métodos `registrar` y `autentifica`)
 - [x] Script `registra_usuarios.ts` con usuarios de prueba
 - [x] `GET /login` → vista de login
@@ -46,8 +46,8 @@ node --env-file=.env registra_usuarios.ts
 ```
 
 Usuarios creados:
-| Email | Contraseña | Admin |
-|-------|-----------|-------|
+| Email | Password | Admin |
+|-------|----------|-------|
 | admin@prado.es | admin123 | ✅ |
 | usuario@prado.es | user123 | ❌ |
 
@@ -100,7 +100,7 @@ Tarea6/
 
 ## 📝 Observaciones
 
-- Las contraseñas se hashean con bcrypt (salt rounds: 10) antes de guardarse en la BD.
+- Las passwords se hashean con bcrypt (salt rounds: 10) antes de guardarse en la BD.
 - El JWT se guarda en cookie `httpOnly` — no accesible desde JavaScript del navegador.
 - `SECRET_KEY` debe configurarse en `.env` para producción.
 - `app.locals.usuario` y `app.locals.admin` están disponibles en todas las plantillas Nunjucks.
